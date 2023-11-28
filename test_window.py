@@ -1,7 +1,7 @@
 import arcade
 
 # Set constants for the screen size
-SCREEN_WIDTH = 600
+SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Tutorial"
 
@@ -16,11 +16,7 @@ arcade.start_render()
 
 # --- Drawing Commands Will Go Here ---
 
-# Draw the face
-x = 300
-y = 300
-
-arcade.draw_line(0,0,200,300, arcade.color.BLACK)
+arcade.draw_line(0,0,400,300, arcade.color.BLACK)
 
 arcade.finish_render()
 
