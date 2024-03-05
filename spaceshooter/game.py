@@ -17,12 +17,15 @@ class Game(arcade.Window):
 
         # some additional attributes
         self.min_asteroids = 3  # minimal number of asteroids to be in the game
+        self.destroyed_asteroids = 0
+        self.gameover = False
+
 
         # Dictionary to keep track of key states
         self.key_states = {}
 
         # Debugging
-        self.debug = False
+        self.debug = True
 
     def setup(self):
         """
@@ -34,10 +37,18 @@ class Game(arcade.Window):
         self.spaceship = SpaceShip(":resources:images/space_shooter/playerShip1_orange.png", 1, 200, 200)
         self.spaceship.set_position(self.width / 2, self.spaceship.height)
 
+        self.destroyed_asteroids = 0
+        self.asteroids = []
+        self.bullets = []
+        self.powerups = []
 
+        self.gameover = False
 
     def update(self, delta_time: float):
-        """Check for user inputs."""
+        # Called each frame
+
+        if self.gameover:
+            return
 
         # Move spaceship if LEFT or RIGHT is pressed
         if self.is_key_pressed(arcade.key.RIGHT):
@@ -49,18 +60,22 @@ class Game(arcade.Window):
         for asteroid in self.asteroids:
             asteroid.move(0, -delta_time)
 
-            # Handle Collisions
-            self.handle_collisions()
+        # Move bullets
+        for bullet in self.bullets:
+            bullet.move(0, delta_time)
+
+        # Handle Collisions
+        self.handle_collisions()
 
         # Remove Asteroids that are out of screen
-        new_asteroids = [asteroid for asteroid in self.asteroids if asteroid.center_y > 0]
-        self.asteroids = new_asteroids
+        new_asteroids = [asteroid for asteroid in self.asteroids if asteroid.center_y < 0]
+        if len(new_asteroids) != 0:
+            print(f"Gameover - Score: {self.destroyed_asteroids}")
+            self.gameover = True
 
         # spawn new asteroid if there are less than 3
         if len(self.asteroids) < self.min_asteroids:
             self.spawn_asteroid()
-
-
 
     def on_draw(self):
         """Render the screen."""
@@ -72,6 +87,8 @@ class Game(arcade.Window):
         self.spaceship.draw()
         for asteroid in self.asteroids:
             asteroid.draw()
+        for bullet in self.bullets:
+            bullet.draw()
 
         # Draw Hitboxes if in debug mode
         if self.debug:
@@ -80,11 +97,17 @@ class Game(arcade.Window):
             for a in self.asteroids:
                 a.hitbox.draw()
 
+            for b in self.bullets:
+                b.hitbox.draw()
+
     def on_key_press(self, key, modifiers):
         self.key_states[key] = True
 
         if key == arcade.key.LCTRL or key == arcade.key.RCTRL:
-            self.spaceship.shoot()
+            if not self.gameover:
+                self.bullets.append(self.spaceship.shoot())
+            else:
+                self.setup()
 
     def on_key_release(self, key, modifiers):
         self.key_states[key] = False
@@ -100,15 +123,27 @@ class Game(arcade.Window):
         if t == 1:
             # Spawn big asteroid
             hp = random.randint(20, 200)
-            speed = random.randint(40,180)
+            speed = random.randint(40, 180)
             asteroid = BigAsteroid(":resources:images/space_shooter/meteorGrey_big2.png", 1, speed, 30, hp)
-            asteroid.set_position(x,y)
+            asteroid.set_position(x, y)
             self.asteroids.append(asteroid)
 
     def handle_collisions(self):
-        # Handle collisions between spaceship and asteroids
         colliding_asteroids = []
+        colliding_bullets = []
+        # Handle collisions between spaceship and asteroids
         for asteroid in self.asteroids:
             if asteroid.hitbox.collides_with(self.spaceship.hitbox):
-                colliding_asteroids.append(asteroid)
+                self.gameover = True
+
+
+        # Handle collisions between spaceship and asteroids
+        for asteroid in self.asteroids:
+            for bullet in self.bullets:
+                if asteroid.hitbox.collides_with(bullet.hitbox):
+                    colliding_asteroids.append(asteroid)
+                    colliding_bullets.append(bullet)
+                    self.destroyed_asteroids += 1
+
         self.asteroids = [asteroid for asteroid in self.asteroids if asteroid not in colliding_asteroids]
+        self.bullets = [bullet for bullet in self.bullets if bullet not in colliding_bullets]

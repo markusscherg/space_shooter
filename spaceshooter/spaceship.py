@@ -2,6 +2,7 @@ import math
 import arcade
 
 from hitbox import Hitbox
+from bullet import Bullet
 
 
 class SpaceShip(arcade.Sprite):
@@ -29,4 +30,7 @@ class SpaceShip(arcade.Sprite):
         self.hitbox.set_position(self.center_x, self.center_y)
 
     def shoot(self):
-        print("Shooting")
+        bullet = Bullet(":resources:images/space_shooter/laserRed01.png", 1, 400, 30)
+        bullet.center_x = self.center_x
+        bullet.center_y = self.center_y + 10
+        return bullet
