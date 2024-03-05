@@ -1,21 +1,32 @@
 import math
-
 import arcade
+
+from hitbox import Hitbox
 
 
 class SpaceShip(arcade.Sprite):
-    def __init__(self, image, scale):
+    def __init__(self, image, scale, speed, hp_max):
         super().__init__(image, scale)
 
-        # Movement speed of the spaceship
-        self.speed = 200
+        # Initialize attributes
+        self.speed = speed
+        self.hp_max = hp_max
+        self.hp_current = hp_max
 
-        print(self.width, self.height)
+        # Initialize hitbox
+        self.hitbox = Hitbox(self.center_x, self.center_y, 0.7 * self.width / 2)
 
     def set_position(self, x, y):
         self.center_x = x
         self.center_y = y
 
+        self.hitbox.set_position(self.center_x, self.center_y)
+
     def move(self, x, y):
         self.center_x += self.speed * x
         self.center_y += self.speed * y
+
+        self.hitbox.set_position(self.center_x, self.center_y)
+
+    def shoot(self):
+        print("Shooting")
