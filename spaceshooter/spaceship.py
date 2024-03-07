@@ -1,8 +1,9 @@
 import math
 import arcade
+import weapons
 
 from hitbox import Hitbox
-from bullet import Bullet
+
 
 
 class SpaceShip(arcade.Sprite):
@@ -13,6 +14,7 @@ class SpaceShip(arcade.Sprite):
         self.speed = speed
         self.hp_max = hp_max
         self.hp_current = hp_max
+        self.weapon = weapons.WEAPON_DEFAULT
 
         # Initialize hitbox
         self.hitbox = Hitbox(self.center_x, self.center_y, 0.7 * self.width / 2)
@@ -30,7 +32,4 @@ class SpaceShip(arcade.Sprite):
         self.hitbox.set_position(self.center_x, self.center_y)
 
     def shoot(self):
-        bullet = Bullet(":resources:images/space_shooter/laserRed01.png", 1, 400, 30)
-        bullet.center_x = self.center_x
-        bullet.center_y = self.center_y + 10
-        return bullet
+        return self.weapon.shoot(self.center_x, self.center_y)

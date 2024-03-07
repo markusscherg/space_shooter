@@ -17,7 +17,7 @@ from spaceshooter.game import Game
 
 def main():
     """Main function"""
-    window = Game(800,600)
+    window = Game(1920 , 1080, fullscreen=True)
     window.setup()
     arcade.run()
 
