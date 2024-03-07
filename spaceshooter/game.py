@@ -1,5 +1,6 @@
 import random
 import arcade
+import weapons
 
 from spaceshooter.asteroids import BigAsteroid
 from spaceshooter.spaceship import SpaceShip
@@ -35,6 +36,7 @@ class Game(arcade.Window):
         # Initialize spaceship
         self.spaceship = SpaceShip(":resources:images/space_shooter/playerShip1_orange.png", 1, 400, 200)
         self.spaceship.set_position(self.width / 2, self.spaceship.height)
+        self.spaceship.weapon = weapons.WEAPON_DEFAULT
 
         self.destroyed_asteroids = 0
         self.asteroids = []
@@ -122,9 +124,9 @@ class Game(arcade.Window):
     def spawn_asteroid(self):
         x = random.randint(0, self.width)
         y = random.randint(self.height, self.height + 350)
-        t = random.randint(1, 2)
+        t = random.randint(1, 3)
 
-        if t == 1:
+        if t < 3:
             # Spawn big asteroid
             hp = random.randint(20, 200)
             speed = random.randint(40, 180)
