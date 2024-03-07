@@ -20,7 +20,6 @@ class Game(arcade.Window):
         self.destroyed_asteroids = 0
         self.gameover = False
 
-
         # Dictionary to keep track of key states
         self.key_states = {}
 
@@ -148,7 +147,6 @@ class Game(arcade.Window):
         for asteroid in self.asteroids:
             if asteroid.hitbox.collides_with(self.spaceship.hitbox):
                 self.gameover = True
-
 
         # Handle collisions between spaceship and asteroids
         for asteroid in self.asteroids:

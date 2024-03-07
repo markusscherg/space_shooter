@@ -39,6 +39,7 @@ class BigAsteroid(Asteroid):
     def __init__(self, image, scale, speed, damage, hp):
         super().__init__(image, scale, speed, damage, hp)
 
+
 class SmallAsteroid(Asteroid):
     def __init__(self, image, scale, speed, damage, hp):
         super().__init__(image, scale, speed, damage, hp)

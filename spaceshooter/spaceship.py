@@ -5,7 +5,6 @@ import weapons
 from hitbox import Hitbox
 
 
-
 class SpaceShip(arcade.Sprite):
     def __init__(self, image, scale, speed, hp_max):
         super().__init__(image, scale)
