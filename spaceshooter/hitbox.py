@@ -12,10 +12,8 @@ class Hitbox:
         self.center_y = y
 
     def collides_with(self, other):
-        # Calculate the distance between the centers of the two hitboxes
-        distance = ((self.center_x - other.center_x) ** 2 + (self.center_y - other.center_y) ** 2) ** 0.5
-        # Check if the distance is less than or equal to the sum of the radii
-        return distance <= (self.radius + other.radius)
+        # TODO: check whether the two hitboxes collide
+        pass
 
     def draw(self):
         arcade.draw_circle_filled(self.center_x, self.center_y, self.radius, arcade.color.BLUE)
